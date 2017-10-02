@@ -4,12 +4,19 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 //import youtube search
 import YTSearch from 'youtube-api-search';
-//import the SearchBar
+//loading speed
+import _ from 'lodash';
+
 import SearchBar from './components/search_bar';
 //Youtube API KEY
 import VideoList from './components/video_list';
+//import VideoDetail 
+import VideoDetail from './components/video_detail';
+//import VideoListItem
+import VideoListItem from './components/video_list_item';
 
-const API_KEY = 'AIzaSyAZCKra_Aq5p67T_1vHl8KMryqlIOS41tk';
+
+const API_KEY = 'AIzaSyA4ON-uz8SA5uy6tr4svGqIm7oldtjeUow';
 
 // Create a new component. This should produce
 // some HTML
@@ -18,22 +25,40 @@ class App extends Component {
 	constructor(props){
 		super(props);
 
-		this.state = {videos: []};
+		this.state = {
+			videos: [],
+			selectedVideo: null
+		};
+		this.videoSearch('TedTalk');
+		
+	}
 
-		YTSearch({key:API_KEY, term: 'surfboards'}, (videos)=> {
-		//console.log(videos);
+	videoSearch(term){
+		YTSearch({key:API_KEY, term: term}, (videos)=> {
+		console.log(videos);
 		//this.setState({videos: videos});
 		//same as 
-		this.setState({videos});
+		this.setState({
+			videos: videos,
+			selectedVideo: videos[0]
+			});
 		});
 	}
 	
 render(){
+	const videoSearch = _.debounce((term) => { this.videoSearch(term)}, 300);
+
 	return (
-	//JSX-<div>Hi!</div> gets turn into HTML which loads onto the page 	
+	//JSX-<div>Hi!</div> gets turn into HTML which loads onto the page 
+
 	<div>
-		<SearchBar />
-		<VideoList videos={this.state.videos}/>	
+		<SearchBar onSearchTermChange={videoSearch} />
+		
+		<VideoDetail video={this.state.selectedVideo}/>
+
+		<VideoList 
+		onVideoSelect={selectedVideo => this.setState({selectedVideo})}
+		videos={this.state.videos}/>	
 	</div>
 	);
 	}
