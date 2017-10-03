@@ -16,7 +16,7 @@ import VideoDetail from './components/video_detail';
 import VideoListItem from './components/video_list_item';
 
 
-const API_KEY = 'AIzaSyA4ON-uz8SA5uy6tr4svGqIm7oldtjeUow';
+const API_KEY = 'USE YOUR OWN YOUTUBE API KEY';
 
 // Create a new component. This should produce
 // some HTML
